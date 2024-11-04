@@ -1,55 +1,58 @@
-const prev = document.getElementById("btn-prev"),
-  next = document.getElementById("btn-next"),
-  slides = document.querySelectorAll(".slide"),
-  dots = document.querySelectorAll(".dot");
+const slidesContainer = document.querySelector('.slides'),
+  prevBtn = document.getElementById('prevBtn'),
+  nextBtn = document.getElementById('nextBtn'),
+  dots = document.querySelectorAll('.dot');
 
 let index = 0;
 
-const activeSlide = (n) => {
-  for (slide of slides) {
-    slide.classList.remove("active");
-  }
-  slides[n].classList.add("active");
-};
-
-const activeDot = (n) => {
-  for (dot of dots) {
-    dot.classList.remove("active");
-  }
-  dots[n].classList.add("active");
-};
-
-const prepareCurrentSlide = i => {
-  activeSlide(i);
-  activeDot(i);
-}
-
-const nextSlide = () => {
-  if(index == slides.length - 1) {
+nextBtn.addEventListener('click', () => {
+  if (index == 2)
     index = 0;
-  } else {
+  else
     index++;
-  }
-  prepareCurrentSlide(index);
-}
 
-const prevSlide = () => {
-  if(index == 0) {
-    index = slides.length - 1;
-  } else {
-    index--;
-  }
-  prepareCurrentSlide(index);
-}
-
-dots.forEach((item, indexDot) => {
-  item.addEventListener('click', () => {
-    index = indexDot;
-    prepareCurrentSlide(index);
-  })
+  changeSlide();
 })
 
-next.addEventListener('click', nextSlide);
-prev.addEventListener('click', prevSlide);
+prevBtn.addEventListener('click', () => {
+  if (index == 0)
+    index = 2;
+  else
+    index--;
 
-setInterval(nextSlide, 2500);
+  changeSlide();
+})
+
+const activeSlide = () => {
+  slidesContainer.classList.remove('s1');
+  slidesContainer.classList.remove('s2');
+  switch (index) {
+    case 1:
+      slidesContainer.classList.add('s1');
+      break;
+    case 2:
+      slidesContainer.classList.add('s2');
+      break;
+  };
+}
+
+const activeDot = () => {
+  for (let dot of dots) {
+    dot.classList.remove('active');
+  }
+  dots[index].classList.add('active');
+};
+
+const changeSlide = () => {
+  activeSlide();
+  activeDot();
+};
+
+dots.forEach((el, n) => {
+  el.addEventListener('click', () => {
+    index = n;
+    changeSlide();
+  })
+});
+
+
