@@ -1,58 +1,66 @@
-const slidesContainer = document.querySelector('.slides'),
-  prevBtn = document.getElementById('prevBtn'),
-  nextBtn = document.getElementById('nextBtn'),
-  dots = document.querySelectorAll('.dot');
+class Slider {
+  constructor() {
+    // get the elements from DOM
+    this.slidesContainer = document.querySelector(".slides");
+    this.prevBtn = document.getElementById("prevBtn");
+    this.nextBtn = document.getElementById("nextBtn");
+    this.dots = document.querySelectorAll(".dot");
 
-let index = 0;
+    // Declare slide index
+    this.index = 0;
 
-nextBtn.addEventListener('click', () => {
-  if (index == 2)
-    index = 0;
-  else
-    index++;
+    // Add event listeners to buttons
+    this.listenForButtons();
+    this.showCurrentSlide();
+  };
 
-  changeSlide();
-})
+  listenForButtons() {
+    this.nextBtn.addEventListener("click", () => {
+      if (this.index == 2) this.index = 0;
+      else this.index++;
 
-prevBtn.addEventListener('click', () => {
-  if (index == 0)
-    index = 2;
-  else
-    index--;
+      this.changeSlide();
+    })
 
-  changeSlide();
-})
+    this.prevBtn.addEventListener("click", () => {
+      if (this.index == 0) this.index = 2;
+      else this.index--;
 
-const activeSlide = () => {
-  slidesContainer.classList.remove('s1');
-  slidesContainer.classList.remove('s2');
-  switch (index) {
-    case 1:
-      slidesContainer.classList.add('s1');
-      break;
-    case 2:
-      slidesContainer.classList.add('s2');
-      break;
+      this.changeSlide();
+    })
+
+    this.dots.forEach((el, n) => {
+      el.addEventListener("click", () => {
+        this.index = n;
+        this.changeSlide();
+      })
+    })
+  };
+
+  showCurrentSlide() {
+    this.slidesContainer.classList.remove("s1");
+    this.slidesContainer.classList.remove("s2");
+    switch (this.index) {
+      case 1:
+        this.slidesContainer.classList.add("s1");
+        break;
+      case 2:
+        this.slidesContainer.classList.add("s2");
+        break;
+    }
+  };
+
+  highlightCurrentDot() {
+    for (let dot of this.dots) {
+      dot.classList.remove("active");
+    }
+    this.dots[this.index].classList.add("active");
+  };
+
+  changeSlide() {
+    this.showCurrentSlide();
+    this.highlightCurrentDot();
   };
 }
 
-const activeDot = () => {
-  for (let dot of dots) {
-    dot.classList.remove('active');
-  }
-  dots[index].classList.add('active');
-};
-
-const changeSlide = () => {
-  activeSlide();
-  activeDot();
-};
-
-dots.forEach((el, n) => {
-  el.addEventListener('click', () => {
-    index = n;
-    changeSlide();
-  })
-});
-
-
+const slider = new Slider();
